@@ -6,8 +6,8 @@ import (
 )
 
 type Repository interface {
-	Create(ctx context.Context,task models.Task) error 
+	Create(ctx context.Context,tasks []models.Task) error 
 	GetAll(ctx context.Context) ([]models.Task, error)
-	Update(ctx context.Context, task models.Task) error 
+	Update(ctx context.Context, id int, updates map[string]any) error 
 	Delete(ctx context.Context, id int) error 
 }

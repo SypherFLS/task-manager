@@ -2,6 +2,7 @@ package services
 
 import (
 	"tm/internal/repository"
+	"context"
 )
 
 type Service struct {
@@ -14,3 +15,8 @@ func NewService(repo repository.Repository) *Service {
 	}
 }
 
+func (s *Service) Create(ctx context.Context, ) error {
+
+
+	return nil
+}

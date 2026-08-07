@@ -1,10 +1,11 @@
 package middlewares
 
 import (
-	"net/http"
-	"tm/internal/api/utils/selfwriter"
+	"context"
 	"log"
+	"net/http"
 	"time"
+	"tm/internal/api/utils/selfwriter"
 )
 
 type Middleware func(http.Handler) http.Handler 
@@ -17,6 +18,14 @@ func Chain(h http.Handler, m ...Middleware) http.Handler {
 	return h
 }
 
+func TimeMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+		defer cancel()
+
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
 
 
 func LogMiddleware(next http.Handler) http.Handler {
