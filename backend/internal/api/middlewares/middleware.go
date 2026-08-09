@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"tm/internal/api/utils/helpers"
 	"tm/internal/api/utils/selfwriter"
 )
 
@@ -38,5 +39,25 @@ func LogMiddleware(next http.Handler) http.Handler {
 		log.Printf("handler %v started \n", r.URL.String()) // сразу весь запрос с query
 		next.ServeHTTP(sw, r)
 		log.Printf("handler %v finished with code %v and time %v \n", r.URL.Path, sw.Code, time.Since(current))
+	})
+}
+
+func RecoverMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
+		defer func() {
+			if err := recover(); err != nil {
+				helpers.WriteError(w, 500, "panic")
+				return
+			}
+		}()
+		next.ServeHTTP(w, r)
+	})
+} 
+
+func AuthMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//TODO AUTH
+
+		next.ServeHTTP(w, r)
 	})
 }

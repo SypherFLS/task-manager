@@ -6,8 +6,8 @@ import (
 )
 
 type TaskDTO struct {
-	Label       string `json:"label"`
-	Description string `json:"description"`
+	Label       string `json:"label" validate:"required, min=3, max=100"`
+	Description string `json:"description" validate:"max=63"`
 	Duration    time.Time `json:"duration"`
 }
 
