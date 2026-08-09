@@ -27,3 +27,21 @@ func ConvManyDto(t []TaskDTO) []models.Task {
 
 	return res
 }
+
+func ToDTO(t models.Task) TaskDTO {
+	return TaskDTO{
+		Label:       t.Label,
+		Description: t.Description,
+		Duration:    t.Duration,
+	}
+}
+
+func ToDTOs(tasks []models.Task) []TaskDTO {
+	res := make([]TaskDTO, 0, len(tasks))
+
+	for _, task := range tasks {
+		res = append(res, ToDTO(task))
+	}
+
+	return res
+}

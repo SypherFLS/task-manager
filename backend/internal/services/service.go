@@ -26,9 +26,11 @@ func (s *Service) Create(ctx context.Context, tasksDto []dto.TaskDTO) error {
 	return err
 }
 
-func (s *Service) Read(ctx context.Context) (error)  {
-
-	return nil
+func (s *Service) Read(ctx context.Context) ([]dto.TaskDTO, error)  {
+	data, err := s.repo.GetAll(ctx)
+	req := dto.ToDTOs(data) 
+	
+	return req, err
 }
 
 func (s *Service) Delete(ctx context.Context, id int) error{

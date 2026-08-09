@@ -35,3 +35,8 @@ func (h *Handler) CreateHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(201)
 }
 
+func (h *Handler) ReadHandler(w http.ResponseWriter, r *http.Request) {
+
+
+	h.service.Read(r.Context())
+}
