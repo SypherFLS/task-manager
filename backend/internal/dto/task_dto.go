@@ -6,20 +6,27 @@ import (
 )
 
 type TaskDTO struct {
-	Label       string `json:"label" validate:"required, min=3, max=100"`
-	Description string `json:"description" validate:"max=63"`
+	ID          int       `json:"id"`
+	Label       string    `json:"label"`
+	Description string    `json:"description"`
 	Duration    time.Time `json:"duration"`
 }
 
-func ToModel(t TaskDTO) models.Task {
-	return models.Task {
-		Label : t.Label,
+type CTaskDTO struct {
+	Label       string    `json:"label" validate:"required,min=3,max=100"`
+	Description string    `json:"description" validate:"max=63"`
+	Duration    time.Time `json:"duration"`
+}
+
+func ToModel(t CTaskDTO) models.Task {
+	return models.Task{
+		Label:       t.Label,
 		Description: t.Description,
-		Duration : t.Duration,
+		Duration:    t.Duration,
 	}
 }
 
-func ConvManyDto(t []TaskDTO) []models.Task {
+func ConvManyDto(t []CTaskDTO) []models.Task {
 	res := make([]models.Task, 0, len(t))
 	for _, r := range t {
 		res = append(res, ToModel(r))

@@ -19,6 +19,15 @@ func Chain(h http.Handler, m ...Middleware) http.Handler {
 	return h
 }
 
+func CommonChain(h http.Handler) http.Handler {
+	return Chain(
+		h,
+		LogMiddleware,
+		RecoverMiddleware,
+		TimeMiddleware,
+	)
+}
+
 func TimeMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)

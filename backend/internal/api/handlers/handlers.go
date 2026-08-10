@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"tm/internal/api/utils/helpers"
 	"tm/internal/dto"
 	"tm/internal/services"
@@ -19,7 +20,7 @@ func NewHandler(service *services.Service) *Handler {
 }
 
 func (h *Handler) CreateHandler(w http.ResponseWriter, r *http.Request) {
-	var dto []dto.TaskDTO
+	var dto []dto.CTaskDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
@@ -36,7 +37,51 @@ func (h *Handler) CreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) ReadHandler(w http.ResponseWriter, r *http.Request) {
+	// TODO Query pagination
 
+	data, err := h.service.Read(r.Context())
+	if err != nil {
+		helpers.WriteError(w, 404, err.Error())
+		return 
+	}
 
-	h.service.Read(r.Context())
+	helpers.WriteJSON(w, 200, data)
+}
+
+func (h *Handler) DeleteHandler(w http.ResponseWriter, r *http.Request) {
+	rawID := r.PathValue("id")
+	id, err := strconv.Atoi(rawID)
+	if err != nil {
+		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := h.service.Delete(r.Context(), id); err != nil {
+		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	w.WriteHeader(204)
+}
+
+func (h *Handler) UpdateHandler(w http.ResponseWriter, r *http.Request) {
+	rawID := r.PathValue("id")
+	id, err := strconv.Atoi(rawID)
+	if err != nil {
+		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	var dto dto.CTaskDTO 
+	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
+		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	} 
+
+	if err := h.service.Update(r.Context(),id, dto); err != nil {
+		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	w.WriteHeader(http.StatusFound)
 }

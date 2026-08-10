@@ -12,11 +12,26 @@ func NewRouter(h *handlers.Handler) http.Handler {
 
 	mux.Handle(
 		"POST /new",
-		middlewares.Chain(
+		middlewares.CommonChain(
 			http.HandlerFunc(h.CreateHandler),
-			middlewares.LogMiddleware,
-			middlewares.RecoverMiddleware,
-			middlewares.TimeMiddleware,
+		),
+	)
+	mux.Handle(
+		"GET /users",
+		middlewares.CommonChain(
+			http.HandlerFunc(h.ReadHandler),
+		),
+	)
+	mux.Handle(
+		"DELETE /user/{id}",
+		middlewares.CommonChain(
+			http.HandlerFunc(h.DeleteHandler),
+		),
+	)
+	mux.Handle(
+		"PATCH /user/{id}",
+		middlewares.CommonChain(
+			http.HandlerFunc(h.UpdateHandler),
 		),
 	)
 

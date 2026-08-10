@@ -17,19 +17,17 @@ func NewService(repo repository.Repository) *Service {
 	}
 }
 
-func (s *Service) Create(ctx context.Context, tasksDto []dto.TaskDTO) error {
+func (s *Service) Create(ctx context.Context, tasksDto []dto.CTaskDTO) error {
 
 	tasks := dto.ConvManyDto(tasksDto)
 
-	err := s.repo.Create(ctx, tasks)
-
-	return err
+	return s.repo.Create(ctx, tasks)
 }
 
 func (s *Service) Read(ctx context.Context) ([]dto.TaskDTO, error)  {
 	data, err := s.repo.GetAll(ctx)
 	req := dto.ToDTOs(data) 
-	
+
 	return req, err
 }
 
@@ -37,7 +35,7 @@ func (s *Service) Delete(ctx context.Context, id int) error{
 	return s.repo.Delete(ctx, id)
 }	
 
-func (s *Service) Update(ctx context.Context) error {
+func (s *Service) Update(ctx context.Context,id int, cdto dto.CTaskDTO) error {
 
 	return nil
 }
