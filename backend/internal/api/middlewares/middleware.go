@@ -12,7 +12,7 @@ import (
 type Middleware func(http.Handler) http.Handler 
 
 func Chain(h http.Handler, m ...Middleware) http.Handler {
-	for i := len(m); i >= 0; i-- {
+	for i := len(m)-1; i >= 0; i-- {
 		h = m[i](h)
 	}
 
@@ -24,11 +24,11 @@ func CommonChain(h http.Handler) http.Handler {
 		h,
 		LogMiddleware,
 		RecoverMiddleware,
-		TimeMiddleware,
+		TimeoutMiddleware,
 	)
 }
 
-func TimeMiddleware(next http.Handler) http.Handler {
+func TimeoutMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 		defer cancel()
