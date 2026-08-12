@@ -16,11 +16,17 @@ type Repo struct {
 var ErrNotFound = errors.New("record not found")
 
 func InitDB() (*gorm.DB, error) {
-	dsn := ""
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(postgres.Open(DSN), &gorm.Config{ // поменять реализацию на конфиг
 		Logger: logger.Default.LogMode(logger.Info),
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	if err := db.AutoMigrate(&models.Task{}); err != nil {
+		return nil, err
+	}
 
 	return db, err
 }

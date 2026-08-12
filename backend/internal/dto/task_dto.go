@@ -1,32 +1,49 @@
 package dto
 
 import (
-	"time"
+	_ "time"
 	"tm/internal/repository/models"
 )
 
+type Plevel string
+
+const (
+	High   Plevel = "high"
+	Middle Plevel = "middle"
+	Low    Plevel = "low"
+)
+
 type TaskDTO struct {
-	ID          int       `json:"id"`
-	Label       string    `json:"label"`
-	Description string    `json:"description"`
-	Duration    time.Time `json:"duration"`
+	ID          int    `json:"id"`
+	Label       string `json:"label"`
+	Description string `json:"description"`
+	Priority    Plevel `json:"priority"`
+	// Duration    time.Time `json:"duration"` // TODO time.Format validation
 }
 
-type CTaskDTO struct {
-	Label       string    `json:"label" validate:"required,min=3,max=100"`
-	Description string    `json:"description" validate:"max=63"`
-	Duration    time.Time `json:"duration"`
+type CreateTaskDTO struct {
+	Label       string `json:"label" validate:"required,min=3,max=100"`
+	Description string `json:"description" validate:"max=63"`
+	Priority    Plevel `json:"priority"`
+	// Duration    time.Time `json:"duration"`
 }
 
-func ToModel(t CTaskDTO) models.Task {
+type UpdateTaskDTO struct {
+	Label       string `json:"label" validate:"required,min=3,max=100"`
+	Description string `json:"description" validate:"max=63"`
+	Priority    Plevel `json:"priority"`
+	// Duration    time.Time `json:"duration"`
+}
+
+func ToModel(t CreateTaskDTO) models.Task {
 	return models.Task{
 		Label:       t.Label,
 		Description: t.Description,
-		Duration:    t.Duration,
+		// Duration:    t.Duration,
 	}
 }
 
-func ConvManyDto(t []CTaskDTO) []models.Task {
+func ConvManyDto(t []CreateTaskDTO) []models.Task {
 	res := make([]models.Task, 0, len(t))
 	for _, r := range t {
 		res = append(res, ToModel(r))
@@ -37,9 +54,10 @@ func ConvManyDto(t []CTaskDTO) []models.Task {
 
 func ToDTO(t models.Task) TaskDTO {
 	return TaskDTO{
+		ID:          t.ID,
 		Label:       t.Label,
 		Description: t.Description,
-		Duration:    t.Duration,
+		// Duration:    t.Duration,
 	}
 }
 

@@ -17,7 +17,7 @@ func NewService(repo repository.Repository) *Service {
 	}
 }
 
-func (s *Service) Create(ctx context.Context, tasksDto []dto.CTaskDTO) error {
+func (s *Service) Create(ctx context.Context, tasksDto []dto.CreateTaskDTO) error {
 
 	tasks := dto.ConvManyDto(tasksDto)
 
@@ -35,7 +35,7 @@ func (s *Service) Delete(ctx context.Context, id int) error{
 	return s.repo.Delete(ctx, id)
 }	
 
-func (s *Service) Update(ctx context.Context,id int, cdto dto.CTaskDTO) error {
+func (s *Service) Update(ctx context.Context,id int, cdto dto.CreateTaskDTO) error { // заменить на upd
 
 	return nil
 }

@@ -20,7 +20,7 @@ func NewHandler(service *services.Service) *Handler {
 }
 
 func (h *Handler) CreateHandler(w http.ResponseWriter, r *http.Request) {
-	var dto []dto.CTaskDTO
+	var dto []dto.CreateTaskDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
@@ -72,7 +72,7 @@ func (h *Handler) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var dto dto.CTaskDTO 
+	var dto dto.CreateTaskDTO // TODO заменить на upd
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
