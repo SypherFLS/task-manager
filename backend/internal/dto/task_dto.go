@@ -24,14 +24,14 @@ type TaskDTO struct {
 type CreateTaskDTO struct {
 	Label       string `json:"label" validate:"required,min=3,max=100"`
 	Description string `json:"description" validate:"max=63"`
-	Priority    Plevel `json:"priority"`
+	Priority    Plevel `json:"priority" validate:"oneof=high middle low"`
 	// Duration    time.Time `json:"duration"`
 }
 
 type UpdateTaskDTO struct {
-	Label       string `json:"label" validate:"required,min=3,max=100"`
+	Label       string `json:"label" validate:"min=3,max=100"`
 	Description string `json:"description" validate:"max=63"`
-	Priority    Plevel `json:"priority"`
+	Priority    Plevel `json:"priority" validate:"oneof=high middle low"`
 	// Duration    time.Time `json:"duration"`
 }
 
@@ -39,6 +39,7 @@ func ToModel(t CreateTaskDTO) models.Task {
 	return models.Task{
 		Label:       t.Label,
 		Description: t.Description,
+		// Priority:    t.Priority,
 		// Duration:    t.Duration,
 	}
 }
