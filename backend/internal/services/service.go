@@ -35,7 +35,12 @@ func (s *Service) Delete(ctx context.Context, id int) error{
 	return s.repo.Delete(ctx, id)
 }	
 
-func (s *Service) Update(ctx context.Context,id int, cdto dto.CreateTaskDTO) error { // заменить на upd
+func (s *Service) Update(ctx context.Context,id int, updto dto.UpdateTaskDTO) error { // заменить на upd
+	updates := updto.ToMap()
 
-	return nil
+	if len(updates) == 0 {
+		return nil
+	}
+
+	return s.repo.Update(ctx, id, updates)
 }

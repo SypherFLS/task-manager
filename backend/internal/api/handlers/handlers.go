@@ -78,13 +78,18 @@ func (h *Handler) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var dto dto.CreateTaskDTO // TODO заменить на upd
+	var dto dto.UpdateTaskDTO 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	} 
 
-	if err := h.service.Update(r.Context(),id, dto); err != nil {
+	if err := validation.Validate(dto); err != nil {
+		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := h.service.Update(r.Context(), id, dto); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}

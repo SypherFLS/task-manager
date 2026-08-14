@@ -39,7 +39,7 @@ func ToModel(t CreateTaskDTO) models.Task {
 	return models.Task{
 		Label:       t.Label,
 		Description: t.Description,
-		// Priority:    t.Priority,
+		Priority:    string(t.Priority),
 		// Duration:    t.Duration,
 	}
 }
@@ -58,6 +58,7 @@ func ToDTO(t models.Task) TaskDTO {
 		ID:          t.ID,
 		Label:       t.Label,
 		Description: t.Description,
+		Priority:    Plevel(t.Priority),
 		// Duration:    t.Duration,
 	}
 }
@@ -70,4 +71,22 @@ func ToDTOs(tasks []models.Task) []TaskDTO {
 	}
 
 	return res
+}
+
+func (t UpdateTaskDTO) ToMap() map[string]any {
+	updates := make(map[string]any)
+
+	if t.Label != nil {
+		updates["label"] = *t.Label
+	}
+
+	if t.Description != nil {
+		updates["description"] = *t.Description
+	}
+
+	if t.Priority != nil {
+		updates["priority"] = string(*t.Priority)
+	}
+
+	return updates
 }

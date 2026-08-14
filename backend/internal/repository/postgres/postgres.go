@@ -59,6 +59,7 @@ func (r *Repo) Update(ctx context.Context, id int, updates map[string]any) error
 	}
 
 	res := r.db.WithContext(ctx).Model(&models.Task{}).Where("id = ?", id).Updates(updates)
+
 	if res.Error != nil {
 		return res.Error
 	}
@@ -76,6 +77,7 @@ func (r *Repo) Delete(ctx context.Context, id int) error {
 	if res.Error != nil {
 		return res.Error
 	}
+
 	if res.RowsAffected == 0 {
 		return ErrNotFound
 	}
