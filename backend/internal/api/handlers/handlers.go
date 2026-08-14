@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"tm/internal/api/utils/helpers"
 	"tm/internal/dto"
+	"tm/internal/validation"
 	"tm/internal/services"
 )
 
@@ -23,6 +24,11 @@ func (h *Handler) CreateHandler(w http.ResponseWriter, r *http.Request) {
 	var dto []dto.CreateTaskDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
+		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := validation.Validate(dto); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}

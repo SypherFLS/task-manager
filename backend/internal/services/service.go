@@ -4,7 +4,6 @@ import (
 	"tm/internal/dto"
 	"tm/internal/repository"
 	_ "tm/internal/repository/models"
-	_ "github.com/go-playground/validator/v10"
 	"context"
 )
 
