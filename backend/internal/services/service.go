@@ -3,6 +3,7 @@ package services
 import (
 	"tm/internal/dto"
 	"tm/internal/repository"
+	_ "fmt"
 	_ "tm/internal/repository/models"
 	"context"
 )
@@ -39,7 +40,7 @@ func (s *Service) Update(ctx context.Context,id int, updto dto.UpdateTaskDTO) er
 	updates := updto.ToMap()
 
 	if len(updates) == 0 {
-		return nil
+		return nil // маппинг ошибок
 	}
 
 	return s.repo.Update(ctx, id, updates)

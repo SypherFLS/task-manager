@@ -29,9 +29,9 @@ type CreateTaskDTO struct {
 }
 
 type UpdateTaskDTO struct {
-	Label       *string `json:"label" validate:"omitempty, min=3,max=100"`
-	Description *string `json:"description" validate:"omitempty, max=63"`
-	Priority    *Plevel `json:"priority" validate:"omitempty, oneof=high middle low"`
+	Label       *string `json:"label" validate:"omitempty,min=3,max=100"`
+	Description *string `json:"description" validate:"omitempty,max=63"`
+	Priority    *Plevel `json:"priority" validate:"omitempty,oneof=high middle low"`
 	// Duration    time.Time `json:"duration"`
 }
 

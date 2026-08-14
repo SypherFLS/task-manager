@@ -6,7 +6,7 @@ import (
 	"errors"
 )
 
-func statusFromError(err error) int {
+func StatusFromError(err error) int {
     switch {
     case errors.Is(err, apperrors.ErrNotFound):
         return http.StatusNotFound

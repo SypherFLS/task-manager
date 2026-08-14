@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	errormapping "tm/internal/api/error_mapping"
 	"tm/internal/api/utils/helpers"
 	"tm/internal/dto"
-	"tm/internal/validation"
 	"tm/internal/services"
+	"tm/internal/validation"
 )
 
 type Handler struct {
@@ -28,9 +29,11 @@ func (h *Handler) CreateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := validation.Validate(dto); err != nil {
-		helpers.WriteError(w, http.StatusBadRequest, err.Error())
-		return
+	for _, task := range dto {
+		if err := validation.Validate(task); err != nil {
+			helpers.WriteError(w, http.StatusBadRequest, err.Error())
+			return
+		}
 	}
 
 	err := h.service.Create(r.Context(), dto)
@@ -90,7 +93,7 @@ func (h *Handler) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.service.Update(r.Context(), id, dto); err != nil {
-		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		helpers.WriteError(w, errormapping.StatusFromError(err), err.Error())
 		return
 	}
 

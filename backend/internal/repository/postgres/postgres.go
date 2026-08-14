@@ -3,7 +3,7 @@ package postgres
 import (
 	"context"
 	"tm/internal/repository/models"
-	"errors"
+	"tm/internal/apperrors"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/driver/postgres"
@@ -13,7 +13,6 @@ type Repo struct {
 	db *gorm.DB
 }
 
-var ErrNotFound = errors.New("record not found")
 
 func InitDB() (*gorm.DB, error) {
 
@@ -41,6 +40,7 @@ func (r *Repo) GetAll(ctx context.Context) ([]models.Task, error) {
 	tasks := make([]models.Task, 0)
 
 	res := r.db.WithContext(ctx).Find(&tasks)
+	
 	if res.Error != nil {
 
 		return nil, res.Error
@@ -65,7 +65,7 @@ func (r *Repo) Update(ctx context.Context, id int, updates map[string]any) error
 	}
 
 	if res.RowsAffected == 0 {
-		return ErrNotFound
+		return apperrors.ErrNotFound
 	}
 
 	return nil
@@ -79,7 +79,7 @@ func (r *Repo) Delete(ctx context.Context, id int) error {
 	}
 
 	if res.RowsAffected == 0 {
-		return ErrNotFound
+		return apperrors.ErrNotFound
 	}
 	
 	return nil
