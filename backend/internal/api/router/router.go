@@ -17,19 +17,19 @@ func NewRouter(h *handlers.Handler) http.Handler {
 		),
 	)
 	mux.Handle(
-		"GET /users",
+		"GET /tasks",
 		middlewares.CommonChain(
 			http.HandlerFunc(h.ReadHandler),
 		),
 	)
 	mux.Handle(
-		"DELETE /user/{id}",
+		"DELETE /task/{id}",
 		middlewares.CommonChain(
 			http.HandlerFunc(h.DeleteHandler),
 		),
 	)
 	mux.Handle(
-		"PATCH /user/{id}",
+		"PATCH /task/{id}",
 		middlewares.CommonChain(
 			http.HandlerFunc(h.UpdateHandler),
 		),
