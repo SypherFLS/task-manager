@@ -6,6 +6,7 @@ import (
 	"strconv"
 	errormapping "tm/internal/api/error_mapping"
 	"tm/internal/api/utils/helpers"
+	"tm/internal/api/utils/params"
 	"tm/internal/dto"
 	"tm/internal/services"
 	"tm/internal/validation"
@@ -46,9 +47,15 @@ func (h *Handler) CreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) ReadHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO Query pagination
+	query, errr := params.ParseQuery(r)
+	
+	if errr != nil {
+		helpers.WriteError(w, http.StatusBadRequest, "Bad query params")
+		return
+	}
+	
 
-	data, err := h.service.Read(r.Context())
+	data, err := h.service.Read(r.Context(), query)
 	if err != nil {
 		helpers.WriteError(w, 404, err.Error())
 		return 

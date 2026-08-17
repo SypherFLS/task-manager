@@ -3,6 +3,7 @@ package services
 import (
 	"tm/internal/dto"
 	"tm/internal/repository"
+	"tm/internal/api/utils/params"
 	_ "fmt"
 	_ "tm/internal/repository/models"
 	"context"
@@ -25,8 +26,8 @@ func (s *Service) Create(ctx context.Context, tasksDto []dto.CreateTaskDTO) erro
 	return s.repo.Create(ctx, tasks)
 }
 
-func (s *Service) Read(ctx context.Context) ([]dto.TaskDTO, error)  {
-	data, err := s.repo.GetAll(ctx)
+func (s *Service) Read(ctx context.Context, query params.FilPage) ([]dto.TaskDTO, error)  {
+	data, err := s.repo.Get(ctx, query)
 	req := dto.ToDTOs(data) 
 
 	return req, err

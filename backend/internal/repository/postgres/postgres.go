@@ -4,6 +4,7 @@ import (
 	"context"
 	"tm/internal/repository/models"
 	"tm/internal/apperrors"
+	"tm/internal/api/utils/params"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/driver/postgres"
@@ -15,7 +16,6 @@ type Repo struct {
 
 
 func InitDB() (*gorm.DB, error) {
-
 	db, err := gorm.Open(postgres.Open(DSN), &gorm.Config{ // поменять реализацию на конфиг
 		Logger: logger.Default.LogMode(logger.Info),
 	})
@@ -36,11 +36,19 @@ func NewRepo(db *gorm.DB) *Repo {
 	} 
 }
  
-func (r *Repo) GetAll(ctx context.Context) ([]models.Task, error) {
+func (r *Repo) Get(ctx context.Context, query params.FilPage) ([]models.Task, error) {
 	tasks := make([]models.Task, 0)
 
-	res := r.db.WithContext(ctx).Find(&tasks)
-	
+	res := r.db.WithContext(ctx).Model(&models.Task{})
+
+	if query.Priority != nil {
+		res = res.Where("priority = ?", *query.Priority)
+	}
+
+	res = res.Limit(query.Limit).Offset(query.Offset)
+
+	res = res.Find(&tasks)
+
 	if res.Error != nil {
 
 		return nil, res.Error
