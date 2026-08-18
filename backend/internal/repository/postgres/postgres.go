@@ -23,7 +23,7 @@ func InitDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	if err := db.AutoMigrate(&models.Task{}); err != nil {
+	if err := db.AutoMigrate(&models.Task{}, &models.User{}); err != nil {
 		return nil, err
 	}
 
@@ -36,7 +36,7 @@ func NewRepo(db *gorm.DB) *Repo {
 	} 
 }
  
-func (r *Repo) Get(ctx context.Context, query params.FilPage) ([]models.Task, error) {
+func (r *Repo) GetTask(ctx context.Context, query params.FilPage, userID int) ([]models.Task, error) {
 	tasks := make([]models.Task, 0)
 
 	res := r.db.WithContext(ctx).Model(&models.Task{})
@@ -57,11 +57,13 @@ func (r *Repo) Get(ctx context.Context, query params.FilPage) ([]models.Task, er
 	return tasks, nil
 }
 
-func (r *Repo) Create(ctx context.Context,tasks []models.Task) error  {
+
+
+func (r *Repo) CreateTask(ctx context.Context,tasks []models.Task, userID int) error  {
 	return r.db.WithContext(ctx).CreateInBatches(tasks, len(tasks)).Error
 }
 	
-func (r *Repo) Update(ctx context.Context, id int, updates map[string]any) error {
+func (r *Repo) UpdateTask(ctx context.Context, id int, updates map[string]any, userID int) error {
 	if len(updates)==0 {
 		return nil
 	}
@@ -79,7 +81,7 @@ func (r *Repo) Update(ctx context.Context, id int, updates map[string]any) error
 	return nil
 }
 
-func (r *Repo) Delete(ctx context.Context, id int) error {
+func (r *Repo) DeleteTask(ctx context.Context, id int, userID int) error {
 	res := r.db.WithContext(ctx).Where("id = ?", id).Delete(&models.Task{})
 
 	if res.Error != nil {

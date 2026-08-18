@@ -9,5 +9,7 @@ type Task struct {
 	Label       string 
 	Description string
 	Priority    string
+
+	User User `gorm:"foreignKey:UserID;references:ID"`
 	// Duration time.Time
 }

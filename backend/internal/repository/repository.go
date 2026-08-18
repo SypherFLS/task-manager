@@ -7,8 +7,8 @@ import (
 )
 
 type Repository interface {
-	Create(ctx context.Context,tasks []models.Task) error 
-	Get(ctx context.Context,query params.FilPage) ([]models.Task, error)
-	Update(ctx context.Context, id int, updates map[string]any) error 
-	Delete(ctx context.Context, id int) error 
+	CreateTask(ctx context.Context,tasks []models.Task, userID int) error 
+	GetTask(ctx context.Context,query params.FilPage, userID int) ([]models.Task, error)
+	UpdateTask(ctx context.Context, id int, updates map[string]any, userID int) error 
+	DeleteTask(ctx context.Context, id int, userID int) error 
 }

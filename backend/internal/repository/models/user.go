@@ -7,6 +7,8 @@ import (
 type User struct {
 	ID int `gorm:"primaryKey"`
 	Name string
-	Contact string 
+	Email string 
 	Password string 
+
+	Tasks []Task `gorm:"foreignKey:UserID"`
 }

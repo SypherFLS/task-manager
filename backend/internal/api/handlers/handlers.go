@@ -37,7 +37,7 @@ func (h *Handler) CreateHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err := h.service.Create(r.Context(), dto)
+	err := h.service.CreateTask(r.Context(), dto)
 	if err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
@@ -55,7 +55,7 @@ func (h *Handler) ReadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	
 
-	data, err := h.service.Read(r.Context(), query)
+	data, err := h.service.ReadTask(r.Context(), query)
 	if err != nil {
 		helpers.WriteError(w, 404, err.Error())
 		return 
@@ -72,7 +72,7 @@ func (h *Handler) DeleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.service.Delete(r.Context(), id); err != nil {
+	if err := h.service.DeleteTask(r.Context(), id); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -99,7 +99,7 @@ func (h *Handler) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.service.Update(r.Context(), id, dto); err != nil {
+	if err := h.service.UpdateTask(r.Context(), id, dto); err != nil {
 		helpers.WriteError(w, errormapping.StatusFromError(err), err.Error())
 		return
 	}
