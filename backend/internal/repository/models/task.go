@@ -6,7 +6,7 @@ import (
 
 type Task struct {
 	ID          int `gorm:"primaryKey"`
-	Label       string 
+	Label       string
 	Description string
 	Priority    string
 
