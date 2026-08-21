@@ -50,7 +50,6 @@ func (r *Repo) GetTask(ctx context.Context, query params.FilPage, userID int) ([
 	res = res.Find(&tasks)
 
 	if res.Error != nil {
-
 		return nil, res.Error
 	}
 

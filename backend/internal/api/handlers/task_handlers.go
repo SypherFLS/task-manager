@@ -43,7 +43,6 @@ func (h *Handler) TaskReadHandler(w http.ResponseWriter, r *http.Request) {
 		helpers.WriteError(w, http.StatusBadRequest, "Bad query params")
 		return
 	}
-	
 
 	data, err := h.service.ReadTask(r.Context(), query)
 	if err != nil {

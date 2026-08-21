@@ -29,7 +29,7 @@ func (s *Service) DeleteTask(ctx context.Context, id int) error{
 	return s.repo.DeleteTask(ctx, id, holder)
 }	
 
-func (s *Service) UpdateTask(ctx context.Context,id int, updto dto.UpdateTaskDTO) error { // заменить на upd
+func (s *Service) UpdateTask(ctx context.Context,id int, updto dto.UpdateTaskDTO) error { 
 	updates := updto.ToMap()
 
 	if len(updates) == 0 {
