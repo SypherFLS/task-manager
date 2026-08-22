@@ -9,10 +9,10 @@ import (
 	"tm/internal/api/utils/selfwriter"
 )
 
-type Middleware func(http.Handler) http.Handler 
+type Middleware func(http.Handler) http.Handler
 
 func Chain(h http.Handler, m ...Middleware) http.Handler {
-	for i := len(m)-1; i >= 0; i-- {
+	for i := len(m) - 1; i >= 0; i-- {
 		h = m[i](h)
 	}
 
@@ -37,13 +37,12 @@ func TimeoutMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-
 func LogMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		current := time.Now()
-		sw := &selfwriter.SelfWriter {
-			ResponseWriter : w,
-			Code : 200,
+		sw := &selfwriter.SelfWriter{
+			ResponseWriter: w,
+			Code:           200,
 		}
 		log.Printf("handler %v started \n", r.URL.String()) // сразу весь запрос с query
 		next.ServeHTTP(sw, r)
@@ -52,7 +51,7 @@ func LogMiddleware(next http.Handler) http.Handler {
 }
 
 func RecoverMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
 				helpers.WriteError(w, 500, "panic")
@@ -61,12 +60,21 @@ func RecoverMiddleware(next http.Handler) http.Handler {
 		}()
 		next.ServeHTTP(w, r)
 	})
-} 
+}
+
+func TraceMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//TODO REQUEST ID TRACE
+
+		next.ServeHTTP(w, r)
+	})
+}
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//TODO AUTH
-
-		next.ServeHTTP(w, r)
+		holder := 0                                             // заменить на юзер айди
+		ctx := context.WithValue(r.Context(), "userID", holder) // передаем айдишник пользователя ДОРАБОТАТЬ
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

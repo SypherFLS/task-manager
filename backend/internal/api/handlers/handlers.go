@@ -9,7 +9,7 @@ type Handler struct {
 }
 
 func NewHandler(service *services.Service) *Handler {
-	return &Handler {
-		service : service,
+	return &Handler{
+		service: service,
 	}
 }

@@ -1,4 +1,4 @@
-package handlers 
+package handlers
 
 import (
 	"encoding/json"
@@ -10,7 +10,6 @@ import (
 	"tm/internal/dto"
 	"tm/internal/validation"
 )
-
 
 func (h *Handler) TaskCreateHandler(w http.ResponseWriter, r *http.Request) {
 	var dto []dto.CreateTaskDTO
@@ -38,7 +37,7 @@ func (h *Handler) TaskCreateHandler(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) TaskReadHandler(w http.ResponseWriter, r *http.Request) {
 	query, errr := params.ParseQuery(r)
-	
+
 	if errr != nil {
 		helpers.WriteError(w, http.StatusBadRequest, "Bad query params")
 		return
@@ -47,7 +46,7 @@ func (h *Handler) TaskReadHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := h.service.ReadTask(r.Context(), query)
 	if err != nil {
 		helpers.WriteError(w, 404, err.Error())
-		return 
+		return
 	}
 
 	helpers.WriteJSON(w, 200, data)
@@ -77,11 +76,11 @@ func (h *Handler) TaskUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var dto dto.UpdateTaskDTO 
+	var dto dto.UpdateTaskDTO
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
-	} 
+	}
 
 	if err := validation.Validate(dto); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())

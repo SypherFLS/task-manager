@@ -1,12 +1,12 @@
-package main 
+package main
 
 import (
-	"tm/internal/repository/postgres"
-	"tm/internal/api/router"
-	"tm/internal/api/handlers"
-	"tm/internal/services"
-	"net/http"
 	"log"
+	"net/http"
+	"tm/internal/api/handlers"
+	"tm/internal/api/router"
+	"tm/internal/repository/postgres"
+	"tm/internal/services"
 )
 
 func main() {

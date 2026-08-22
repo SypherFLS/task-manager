@@ -26,6 +26,11 @@ func (h *Handler) UserRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 			return
 	}
+
+	if err := h.service.RegisterUser(r.Context(), user); err != nil {
+		helpers.WriteError(w, http.StatusForbidden, err.Error())
+		return
+	}
 }
 
 func (h *Handler) UserLoginHandler(w http.ResponseWriter, r *http.Request) {

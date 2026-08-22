@@ -17,10 +17,9 @@ func NewRouter(h *handlers.Handler) http.Handler {
 	public.Handle("POST /login", http.HandlerFunc(h.UserLoginHandler))
 
 	private.Handle("POST /tasks", http.HandlerFunc(h.TaskCreateHandler))
-	private.Handle("GET /tasks",http.HandlerFunc(h.TaskReadHandler))
-	private.Handle("DELETE /task/{id}",http.HandlerFunc(h.TaskDeleteHandler))
-	private.Handle("PATCH /task/{id}",http.HandlerFunc(h.TaskUpdateHandler))
-
+	private.Handle("GET /tasks", http.HandlerFunc(h.TaskReadHandler))
+	private.Handle("DELETE /task/{id}", http.HandlerFunc(h.TaskDeleteHandler))
+	private.Handle("PATCH /task/{id}", http.HandlerFunc(h.TaskUpdateHandler))
 
 	publicChain := middlewares.CommonChain(
 		public,

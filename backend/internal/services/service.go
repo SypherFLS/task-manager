@@ -1,11 +1,10 @@
 package services
 
 import (
-	"tm/internal/repository"
 	_ "fmt"
+	"tm/internal/repository"
 	_ "tm/internal/repository/models"
 )
-
 
 type Service struct {
 	repo repository.Repository
@@ -13,7 +12,6 @@ type Service struct {
 
 func NewService(repo repository.Repository) *Service {
 	return &Service{
-		repo : repo,
+		repo: repo,
 	}
 }
-
