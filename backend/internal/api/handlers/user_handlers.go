@@ -31,6 +31,8 @@ func (h *Handler) UserRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		helpers.WriteError(w, http.StatusForbidden, err.Error())
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (h *Handler) UserLoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -38,11 +40,16 @@ func (h *Handler) UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
-			return
+		return
 	}
 
 	if err := validation.Validate(user); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
-			return
+		return
+	}
+
+	if err := h.service.LoginUser(r.Context(), user); err != nil {
+		helpers.WriteError(w, http.StatusBadRequest, err.Error())
+		return 
 	}
 }

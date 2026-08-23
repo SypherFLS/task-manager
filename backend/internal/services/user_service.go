@@ -23,4 +23,12 @@ func (s *Service) RegisterUser(ctx context.Context, user dto.RegisterDTO) error 
 	return s.repo.RegisterUser(ctx, userModel)
 }
 
-func (s *Service) LoginUser(ctx context.Context, user dto.LoginDTO) error
+func (s *Service) LoginUser(ctx context.Context, user dto.LoginDTO) error {
+	
+	want, err := s.repo.LoginUser(ctx, user.Email)
+	if err != nil {
+		return err
+	}
+
+	return security.CheckPassword(user.Password, want)
+}
