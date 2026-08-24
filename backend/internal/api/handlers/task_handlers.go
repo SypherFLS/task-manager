@@ -16,6 +16,7 @@ func (h *Handler) TaskCreateHandler(w http.ResponseWriter, r *http.Request) {
 
 	if erro != nil {
 		helpers.WriteError(w, http.StatusUnauthorized, "failed auth check")
+		return
 	}
 
 	var dto []dto.CreateTaskDTO
@@ -46,6 +47,7 @@ func (h *Handler) TaskReadHandler(w http.ResponseWriter, r *http.Request) {
 
 	if erro != nil {
 		helpers.WriteError(w, http.StatusUnauthorized, "failed auth check")
+		return
 	}
 	query, errr := params.ParseQuery(r)
 
@@ -68,6 +70,7 @@ func (h *Handler) TaskDeleteHandler(w http.ResponseWriter, r *http.Request) {
 
 	if erro != nil {
 		helpers.WriteError(w, http.StatusUnauthorized, "failed auth check")
+		return
 	}
 
 	rawID := r.PathValue("id")
@@ -90,6 +93,7 @@ func (h *Handler) TaskUpdateHandler(w http.ResponseWriter, r *http.Request) {
 
 	if erro != nil {
 		helpers.WriteError(w, http.StatusUnauthorized, "failed auth check")
+		return
 	}
 
 	rawID := r.PathValue("id")

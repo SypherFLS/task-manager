@@ -1,4 +1,4 @@
-package params 
+package params
 
 import (
 	"net/http"
@@ -7,13 +7,13 @@ import (
 )
 
 type FilPage struct {
-	Priority *string 
+	Priority *string
 
-	Limit int
-	Offset int 
+	Limit  int
+	Offset int
 }
 
-func ParseQuery(r *http.Request) (FilPage, error){
+func ParseQuery(r *http.Request) (FilPage, error) {
 	var fp FilPage
 	priority := r.URL.Query().Get("priority")
 
@@ -24,12 +24,11 @@ func ParseQuery(r *http.Request) (FilPage, error){
 	default:
 		return fp, apperrors.BadQuery
 	}
-	
 
 	limit := r.URL.Query().Get("limit")
-	if limit != ""{
+	if limit != "" {
 		limInt, err := strconv.Atoi(limit)
-		if err != nil || limInt <= 0 || limInt > 1000{ 
+		if err != nil || limInt <= 0 || limInt > 1000 {
 			return fp, apperrors.BadQuery
 		}
 		fp.Limit = limInt
@@ -40,14 +39,13 @@ func ParseQuery(r *http.Request) (FilPage, error){
 	offset := r.URL.Query().Get("offset")
 	if offset != "" {
 		offsetInt, err := strconv.Atoi(offset)
-		if err != nil || offsetInt < 0{
+		if err != nil || offsetInt < 0 {
 			return fp, apperrors.BadQuery
 		}
 		fp.Offset = offsetInt
 	} else {
 		fp.Offset = 0
 	}
-
 
 	return fp, nil
 }

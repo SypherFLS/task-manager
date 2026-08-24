@@ -13,7 +13,6 @@ import (
 	"tm/internal/validation"
 )
 
-
 func (h *Handler) UserRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var user dto.RegisterDTO
 
@@ -24,7 +23,7 @@ func (h *Handler) UserRegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := validation.Validate(user); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
-			return
+		return
 	}
 
 	if err := h.service.RegisterUser(r.Context(), user); err != nil {
@@ -50,6 +49,6 @@ func (h *Handler) UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := h.service.LoginUser(r.Context(), user); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
-		return 
+		return
 	}
 }

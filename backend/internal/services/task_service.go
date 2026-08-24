@@ -7,8 +7,6 @@ import (
 	_ "tm/internal/repository/models"
 )
 
-var holder = 0 // заменить на айдишник
-
 func (s *Service) CreateTask(ctx context.Context, tasksDto []dto.CreateTaskDTO, userID int) error {
 
 	tasks := dto.ConvManyDto(tasksDto)

@@ -36,6 +36,5 @@ func (s *Service) LoginUser(ctx context.Context, user dto.LoginDTO) error {
 
 	//TODO JWT generation from result.ID
 
-
 	return nil
 }

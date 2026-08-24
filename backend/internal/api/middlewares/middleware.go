@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 	"tm/internal/api/utils/helpers"
+	"tm/internal/api/utils/params"
 	"tm/internal/api/utils/selfwriter"
 )
 
@@ -74,7 +75,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//TODO AUTH
 		holder := 0                                             // заменить на юзер айди
-		ctx := context.WithValue(r.Context(), "userID", holder) // передаем айдишник пользователя ДОРАБОТАТЬ
+		ctx := context.WithValue(r.Context(), params.UserIDKey, holder) // передаем айдишник пользователя ДОРАБОТАТЬ
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

@@ -8,4 +8,5 @@ var (
 	ErrConflict        = errors.New("conflict")
 	BadQuery           = errors.New("bad query")
 	BlankUserID        = errors.New("blank user id")
+	WrongUserID        = errors.New("Wrong user ID")
 )
