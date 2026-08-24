@@ -17,6 +17,6 @@ func RegToModel(user RegisterDTO, hash string) models.User {
 	return models.User{
 		Name:         user.Name,
 		Email:        user.Email,
-		PasswordHASH: hash,
+		PasswordHash: hash,
 	}
 }

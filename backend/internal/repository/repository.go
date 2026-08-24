@@ -13,5 +13,5 @@ type Repository interface {
 	DeleteTask(ctx context.Context, id int, userID int) error
 
 	RegisterUser(ctx context.Context, user models.User) error
-	LoginUser(ctx context.Context, email string)  (string, error)
+	LoginUser(ctx context.Context, email string)  (*models.LoginResult, error)
 }

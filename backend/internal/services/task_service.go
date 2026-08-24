@@ -9,30 +9,30 @@ import (
 
 var holder = 0 // заменить на айдишник
 
-func (s *Service) CreateTask(ctx context.Context, tasksDto []dto.CreateTaskDTO) error {
+func (s *Service) CreateTask(ctx context.Context, tasksDto []dto.CreateTaskDTO, userID int) error {
 
 	tasks := dto.ConvManyDto(tasksDto)
 
-	return s.repo.CreateTask(ctx, tasks, holder)
+	return s.repo.CreateTask(ctx, tasks, userID)
 }
 
-func (s *Service) ReadTask(ctx context.Context, query params.FilPage) ([]dto.TaskDTO, error) {
-	data, err := s.repo.GetTask(ctx, query, holder)
+func (s *Service) ReadTask(ctx context.Context, query params.FilPage, userID int) ([]dto.TaskDTO, error) {
+	data, err := s.repo.GetTask(ctx, query, userID)
 	req := dto.ToDTOs(data)
 
 	return req, err
 }
 
-func (s *Service) DeleteTask(ctx context.Context, id int) error {
-	return s.repo.DeleteTask(ctx, id, holder)
+func (s *Service) DeleteTask(ctx context.Context, taskID int, userID int) error {
+	return s.repo.DeleteTask(ctx, taskID, userID)
 }
 
-func (s *Service) UpdateTask(ctx context.Context, id int, updto dto.UpdateTaskDTO) error {
+func (s *Service) UpdateTask(ctx context.Context, taskID int, updto dto.UpdateTaskDTO, userID int) error {
 	updates := updto.ToMap()
 
 	if len(updates) == 0 {
 		return nil // маппинг ошибок
 	}
 
-	return s.repo.UpdateTask(ctx, id, updates, holder)
+	return s.repo.UpdateTask(ctx, taskID, updates, userID)
 }

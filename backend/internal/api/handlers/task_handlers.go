@@ -12,6 +12,12 @@ import (
 )
 
 func (h *Handler) TaskCreateHandler(w http.ResponseWriter, r *http.Request) {
+	userID, erro := params.GetUserID(r)
+
+	if erro != nil {
+		helpers.WriteError(w, http.StatusUnauthorized, "failed auth check")
+	}
+
 	var dto []dto.CreateTaskDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
@@ -26,7 +32,7 @@ func (h *Handler) TaskCreateHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err := h.service.CreateTask(r.Context(), dto)
+	err := h.service.CreateTask(r.Context(), dto, userID)
 	if err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
@@ -36,6 +42,11 @@ func (h *Handler) TaskCreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) TaskReadHandler(w http.ResponseWriter, r *http.Request) {
+	userID, erro := params.GetUserID(r)
+
+	if erro != nil {
+		helpers.WriteError(w, http.StatusUnauthorized, "failed auth check")
+	}
 	query, errr := params.ParseQuery(r)
 
 	if errr != nil {
@@ -43,7 +54,7 @@ func (h *Handler) TaskReadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := h.service.ReadTask(r.Context(), query)
+	data, err := h.service.ReadTask(r.Context(), query, userID)
 	if err != nil {
 		helpers.WriteError(w, 404, err.Error())
 		return
@@ -53,14 +64,20 @@ func (h *Handler) TaskReadHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) TaskDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	userID, erro := params.GetUserID(r)
+
+	if erro != nil {
+		helpers.WriteError(w, http.StatusUnauthorized, "failed auth check")
+	}
+
 	rawID := r.PathValue("id")
-	id, err := strconv.Atoi(rawID)
+	taskID, err := strconv.Atoi(rawID)
 	if err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := h.service.DeleteTask(r.Context(), id); err != nil {
+	if err := h.service.DeleteTask(r.Context(), taskID, userID); err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -69,8 +86,14 @@ func (h *Handler) TaskDeleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) TaskUpdateHandler(w http.ResponseWriter, r *http.Request) {
+	userID, erro := params.GetUserID(r)
+
+	if erro != nil {
+		helpers.WriteError(w, http.StatusUnauthorized, "failed auth check")
+	}
+
 	rawID := r.PathValue("id")
-	id, err := strconv.Atoi(rawID)
+	taskID, err := strconv.Atoi(rawID)
 	if err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
@@ -87,7 +110,7 @@ func (h *Handler) TaskUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.service.UpdateTask(r.Context(), id, dto); err != nil {
+	if err := h.service.UpdateTask(r.Context(), taskID, dto, userID); err != nil {
 		helpers.WriteError(w, errormapping.StatusFromError(err), err.Error())
 		return
 	}

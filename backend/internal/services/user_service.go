@@ -24,11 +24,18 @@ func (s *Service) RegisterUser(ctx context.Context, user dto.RegisterDTO) error 
 }
 
 func (s *Service) LoginUser(ctx context.Context, user dto.LoginDTO) error {
-	
-	want, err := s.repo.LoginUser(ctx, user.Email)
+	result, err := s.repo.LoginUser(ctx, user.Email)
+
 	if err != nil {
 		return err
 	}
 
-	return security.CheckPassword(user.Password, want)
+	if err := security.CheckPassword(user.Password, result.PasswordHash); err != nil {
+		return err
+	}
+
+	//TODO JWT generation from result.ID
+
+
+	return nil
 }
