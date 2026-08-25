@@ -15,13 +15,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed connect to db with error %v \n", err)
 	}
-	
-	JWTmanager := auth.NewJWTManager(string(auth.SecretKey)) // заменить на конфиг
+
+	JWTManager := auth.NewJWTManager(string(auth.SecretKey)) // заменить на конфиг
 
 	repo := postgres.NewRepo(db)
-	service := services.NewService(repo, JWTmanager)
+	service := services.NewService(repo, JWTManager)
 	handler := handlers.NewHandler(service)
-	rout := router.NewRouter(handler)
+	rout := router.NewRouter(handler, JWTManager)
 
 	http.ListenAndServe(":8080", rout)
 }

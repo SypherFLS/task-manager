@@ -9,7 +9,7 @@ import (
 	"tm/internal/api/utils/helpers"
 	"tm/internal/api/utils/params"
 	"tm/internal/api/utils/selfwriter"
-	_ "tm/internal/auth"
+	"tm/internal/auth"
 
 	_ "github.com/golang-jwt/jwt/v5"
 )
@@ -75,29 +75,32 @@ func TraceMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func AuthMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
+const bearer = "Bearer "
 
-		if authHeader == "" {
-			helpers.WriteError(w, http.StatusUnauthorized, "Unauthorized")
-			return
-		}
+func AuthMiddleware(jwtManager *auth.JWTManager) Middleware {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			authHeader := r.Header.Get("Authorization")
 
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-		_ = tokenString
-		holder := 0   
-		// token := 0 // доработать 
-		// userID, err := auth.Validate(token)
-        //     if err != nil {
-        //         helpers.WriteError(
-        //             w,
-        //             http.StatusUnauthorized,
-        //             "unauthorized",
-        //         )
-        //         return
-        //     }                                          
-		ctx := context.WithValue(r.Context(), params.UserIDKey, holder) 
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+			if authHeader == "" {
+				helpers.WriteError(w, http.StatusUnauthorized, "invalid authorization header")
+				return
+			}
+
+			if !strings.HasPrefix(authHeader, bearer) {
+				helpers.WriteError(w, http.StatusUnauthorized, "invalid authorization header")
+				return
+			}
+
+			token := strings.TrimPrefix(authHeader, bearer)
+  
+			userID, err := jwtManager.Validate(token)
+			    if err != nil {
+			        helpers.WriteError(w, http.StatusUnauthorized, "invalid authorization header")
+			        return
+			    }                                          
+			ctx := context.WithValue(r.Context(), params.UserIDKey, userID) 
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
 }

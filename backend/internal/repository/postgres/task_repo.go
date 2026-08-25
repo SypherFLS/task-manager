@@ -10,8 +10,7 @@ import (
 func (r *Repo) GetTask(ctx context.Context, query params.FilPage, userID int) ([]models.Task, error) {
 	tasks := make([]models.Task, 0)
 
-	res := r.db.WithContext(ctx).Model(&models.Task{})
-	res = r.db.Where("user_id = ?", userID)
+	res := r.db.WithContext(ctx).Model(&models.Task{}).Where("user_id = ?", userID)
 
 	if query.Priority != nil {
 		res = res.Where("priority = ?", *query.Priority)
