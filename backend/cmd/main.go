@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"tm/internal/api/handlers"
 	"tm/internal/api/router"
+	"tm/internal/auth"
 	"tm/internal/repository/postgres"
 	"tm/internal/services"
 )
@@ -14,9 +15,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed connect to db with error %v \n", err)
 	}
+	
+	JWTmanager := auth.NewJWTManager(string(auth.SecretKey)) // заменить на конфиг
 
 	repo := postgres.NewRepo(db)
-	service := services.NewService(repo)
+	service := services.NewService(repo, JWTmanager)
 	handler := handlers.NewHandler(service)
 	rout := router.NewRouter(handler)
 

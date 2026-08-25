@@ -4,7 +4,7 @@ import (
 	"context"
 	"tm/internal/dto"
 	_ "tm/internal/repository/models"
-	"tm/internal/security"
+	"tm/internal/auth"
 	"tm/internal/validation"
 )
 
@@ -13,7 +13,7 @@ func (s *Service) RegisterUser(ctx context.Context, user dto.RegisterDTO) error 
 		return err
 	}
 
-	hashed, err := security.HashPassword(user.Password)
+	hashed, err := auth.HashPassword(user.Password)
 	if err != nil {
 		return err
 	}
@@ -23,18 +23,21 @@ func (s *Service) RegisterUser(ctx context.Context, user dto.RegisterDTO) error 
 	return s.repo.RegisterUser(ctx, userModel)
 }
 
-func (s *Service) LoginUser(ctx context.Context, user dto.LoginDTO) error {
+func (s *Service) LoginUser(ctx context.Context, user dto.LoginDTO) (string, error) {
 	result, err := s.repo.LoginUser(ctx, user.Email)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	if err := security.CheckPassword(user.Password, result.PasswordHash); err != nil {
-		return err
+	if err := auth.CheckPassword(user.Password, result.PasswordHash); err != nil {
+		return "", err
 	}
 
-	//TODO JWT generation from result.ID
-
-	return nil
+	token, err := s.jwtManager.Generate(result.ID)
+	if err != nil {
+		return "", err
+	}
+	
+	return token, nil
 }

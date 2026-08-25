@@ -3,13 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	_ "strconv"
 
 	// errormapping "tm/internal/api/error_mapping"
 	"tm/internal/api/utils/helpers"
-	_ "tm/internal/api/utils/params"
 	"tm/internal/dto"
-	_ "tm/internal/dto"
 	"tm/internal/validation"
 )
 
@@ -47,8 +44,11 @@ func (h *Handler) UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.service.LoginUser(r.Context(), user); err != nil {
+	token, err := h.service.LoginUser(r.Context(), user)
+	_ = token
+	if err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}
+	
 }

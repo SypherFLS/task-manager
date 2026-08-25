@@ -4,10 +4,14 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 	"tm/internal/api/utils/helpers"
 	"tm/internal/api/utils/params"
 	"tm/internal/api/utils/selfwriter"
+	_ "tm/internal/auth"
+
+	_ "github.com/golang-jwt/jwt/v5"
 )
 
 type Middleware func(http.Handler) http.Handler
@@ -73,9 +77,27 @@ func TraceMiddleware(next http.Handler) http.Handler {
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//TODO AUTH
-		holder := 0                                             // заменить на юзер айди
-		ctx := context.WithValue(r.Context(), params.UserIDKey, holder) // передаем айдишник пользователя ДОРАБОТАТЬ
+		authHeader := r.Header.Get("Authorization")
+
+		if authHeader == "" {
+			helpers.WriteError(w, http.StatusUnauthorized, "Unauthorized")
+			return
+		}
+
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		_ = tokenString
+		holder := 0   
+		// token := 0 // доработать 
+		// userID, err := auth.Validate(token)
+        //     if err != nil {
+        //         helpers.WriteError(
+        //             w,
+        //             http.StatusUnauthorized,
+        //             "unauthorized",
+        //         )
+        //         return
+        //     }                                          
+		ctx := context.WithValue(r.Context(), params.UserIDKey, holder) 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

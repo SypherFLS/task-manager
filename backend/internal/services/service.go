@@ -1,17 +1,18 @@
 package services
 
 import (
-	_ "fmt"
+	"tm/internal/auth"
 	"tm/internal/repository"
-	_ "tm/internal/repository/models"
 )
 
 type Service struct {
 	repo repository.Repository
+	jwtManager *auth.JWTManager
 }
 
-func NewService(repo repository.Repository) *Service {
+func NewService(repo repository.Repository, JWTManager *auth.JWTManager) *Service {
 	return &Service{
 		repo: repo,
+		jwtManager: JWTManager,
 	}
 }
