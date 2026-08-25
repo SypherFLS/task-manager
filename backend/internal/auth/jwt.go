@@ -44,7 +44,7 @@ func (j *JWTManager) Generate(userID int) (string, error) {
 func (j *JWTManager) Validate(tokenString string) (int, error) {
 	claims := &Claims{}
 
-	token, err := jwt.ParseWithClaims(tokenString, claims, 
+	token, err := jwt.ParseWithClaims(tokenString, claims,
 		func(token *jwt.Token) (any, error) {
 			if token.Method != jwt.SigningMethodHS256 {
 				return nil, apperrors.WrongSignMethod

@@ -45,10 +45,11 @@ func (h *Handler) UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token, err := h.service.LoginUser(r.Context(), user)
-	_ = token
+
 	if err != nil {
 		helpers.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}
-	
+
+	helpers.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
 }

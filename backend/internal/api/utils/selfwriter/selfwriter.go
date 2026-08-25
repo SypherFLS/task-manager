@@ -10,6 +10,6 @@ type SelfWriter struct {
 }
 
 func (sw *SelfWriter) WriteHeader(code int) {
-	sw.Code = code 
+	sw.Code = code
 	sw.ResponseWriter.WriteHeader(code)
 }

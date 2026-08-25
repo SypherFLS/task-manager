@@ -4,11 +4,9 @@ import (
 	"context"
 	"tm/internal/api/utils/params"
 	"tm/internal/dto"
-	_ "tm/internal/repository/models"
 )
 
 func (s *Service) CreateTask(ctx context.Context, tasksDto []dto.CreateTaskDTO, userID int) error {
-
 	tasks := dto.ConvManyDto(tasksDto)
 
 	return s.repo.CreateTask(ctx, tasks, userID)

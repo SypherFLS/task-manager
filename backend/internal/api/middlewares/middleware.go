@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"runtime/debug"
 	"strings"
 	"time"
 	"tm/internal/api/utils/helpers"
@@ -49,7 +50,7 @@ func LogMiddleware(next http.Handler) http.Handler {
 			ResponseWriter: w,
 			Code:           200,
 		}
-		log.Printf("handler %v started \n", r.URL.String()) // сразу весь запрос с query
+		log.Printf("handler %v started \n", r.URL.String())
 		next.ServeHTTP(sw, r)
 		log.Printf("handler %v finished with code %v and time %v \n", r.URL.Path, sw.Code, time.Since(current))
 	})
@@ -59,6 +60,9 @@ func RecoverMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
+				log.Printf("PANIC: %v\n", err)
+				debug.PrintStack()
+
 				helpers.WriteError(w, 500, "panic")
 				return
 			}
@@ -86,20 +90,19 @@ func AuthMiddleware(jwtManager *auth.JWTManager) Middleware {
 				helpers.WriteError(w, http.StatusUnauthorized, "invalid authorization header")
 				return
 			}
-
 			if !strings.HasPrefix(authHeader, bearer) {
 				helpers.WriteError(w, http.StatusUnauthorized, "invalid authorization header")
 				return
 			}
 
 			token := strings.TrimPrefix(authHeader, bearer)
-  
+
 			userID, err := jwtManager.Validate(token)
-			    if err != nil {
-			        helpers.WriteError(w, http.StatusUnauthorized, "invalid authorization header")
-			        return
-			    }                                          
-			ctx := context.WithValue(r.Context(), params.UserIDKey, userID) 
+			if err != nil {
+				helpers.WriteError(w, http.StatusUnauthorized, "invalid authorization header")
+				return
+			}
+			ctx := context.WithValue(r.Context(), params.UserIDKey, userID)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

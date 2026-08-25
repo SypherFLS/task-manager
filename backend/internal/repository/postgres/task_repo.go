@@ -27,7 +27,7 @@ func (r *Repo) GetTask(ctx context.Context, query params.FilPage, userID int) ([
 	return tasks, nil
 }
 
-func (r *Repo) CreateTask(ctx context.Context, tasks []models.Task, userID int) error {
+func (r *Repo) CreateTask(ctx context.Context, tasks []*models.Task, userID int) error {
 	for _, task := range tasks {
 		task.UserID = userID
 	}

@@ -12,5 +12,4 @@ type Task struct {
 
 	UserID int
 	User   User
-	// Duration time.Time
 }

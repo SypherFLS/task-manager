@@ -6,13 +6,13 @@ import (
 )
 
 type Service struct {
-	repo repository.Repository
+	repo       repository.Repository
 	jwtManager *auth.JWTManager
 }
 
 func NewService(repo repository.Repository, JWTManager *auth.JWTManager) *Service {
 	return &Service{
-		repo: repo,
+		repo:       repo,
 		jwtManager: JWTManager,
 	}
 }

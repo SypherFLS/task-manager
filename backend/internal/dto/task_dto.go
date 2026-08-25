@@ -18,34 +18,30 @@ type TaskDTO struct {
 	Label       string `json:"label"`
 	Description string `json:"description"`
 	Priority    Plevel `json:"priority"`
-	// Duration    time.Time `json:"duration"` // TODO time.Format validation
 }
 
 type CreateTaskDTO struct {
 	Label       string `json:"label" validate:"required,min=3,max=100"`
 	Description string `json:"description" validate:"max=63"`
 	Priority    Plevel `json:"priority" validate:"required,oneof=high middle low"`
-	// Duration    time.Time `json:"duration"`
 }
 
 type UpdateTaskDTO struct {
 	Label       *string `json:"label" validate:"omitempty,min=3,max=100"`
 	Description *string `json:"description" validate:"omitempty,max=63"`
 	Priority    *Plevel `json:"priority" validate:"omitempty,oneof=high middle low"`
-	// Duration    time.Time `json:"duration"`
 }
 
-func ToModel(t CreateTaskDTO) models.Task {
-	return models.Task{
+func ToModel(t CreateTaskDTO) *models.Task {
+	return &models.Task{
 		Label:       t.Label,
 		Description: t.Description,
 		Priority:    string(t.Priority),
-		// Duration:    t.Duration,
 	}
 }
 
-func ConvManyDto(t []CreateTaskDTO) []models.Task {
-	res := make([]models.Task, 0, len(t))
+func ConvManyDto(t []CreateTaskDTO) []*models.Task {
+	res := make([]*models.Task, 0, len(t))
 	for _, r := range t {
 		res = append(res, ToModel(r))
 	}

@@ -2,9 +2,9 @@ package services
 
 import (
 	"context"
+	"tm/internal/auth"
 	"tm/internal/dto"
 	_ "tm/internal/repository/models"
-	"tm/internal/auth"
 	"tm/internal/validation"
 )
 
@@ -38,6 +38,6 @@ func (s *Service) LoginUser(ctx context.Context, user dto.LoginDTO) (string, err
 	if err != nil {
 		return "", err
 	}
-	
+
 	return token, nil
 }

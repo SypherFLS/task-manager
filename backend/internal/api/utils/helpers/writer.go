@@ -1,9 +1,9 @@
 package helpers
 
 import (
-	"net/http"
-	"log"
 	"encoding/json"
+	"log"
+	"net/http"
 )
 
 type ErrorResponse struct {
@@ -24,8 +24,8 @@ func WriteJSON(w http.ResponseWriter, code int, data any) {
 }
 
 func WriteError(w http.ResponseWriter, code int, msg string) {
-	erro := ErrorResponse {
-		Error : msg,
-	} 
+	erro := ErrorResponse{
+		Error: msg,
+	}
 	WriteJSON(w, code, erro)
 }
