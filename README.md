@@ -259,7 +259,7 @@ GET /api/tasks?priority=high&limit=20&offset=0
 ├── README.md                # документация
 └── backend/
 		├── cmd/main.go          # сборка и запуск приложения
-		├── config/              # задел под конфигурацию
+		├── config/              # конфигурация
 		├── internal/
 		│   ├── api/             # router, handlers, middleware и HTTP helpers
 		│   ├── apperrors/       # прикладные ошибки
@@ -272,3 +272,9 @@ GET /api/tasks?priority=high&limit=20&offset=0
 		├── Dockerfile
 		└── go.mod
 ```
+
+
+## Конфигурация
+- Реализована с помощью библиотеки "gopkg.in/yaml.v3"
+- Имеется файл перменных окружения .env а также .env.example для демонстрации необходимых полей для запуска
+- все секреты скрыты в .env а конфигурация в config.yaml

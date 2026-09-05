@@ -6,9 +6,10 @@ import (
 	"tm/internal/api/handlers"
 	"tm/internal/api/middlewares"
 	"tm/internal/auth"
+	"tm/internal/config"
 )
 
-func NewRouter(h *handlers.Handler, jwtManager *auth.JWTManager) http.Handler {
+func NewRouter(h *handlers.Handler, jwtManager *auth.JWTManager, cfg config.Config) http.Handler {
 	root := http.NewServeMux()
 
 	public := http.NewServeMux()
@@ -24,12 +25,14 @@ func NewRouter(h *handlers.Handler, jwtManager *auth.JWTManager) http.Handler {
 
 	publicChain := middlewares.CommonChain(
 		public,
+		cfg.Server.Timeout,
 	)
 
 	privateChain := middlewares.CommonChain(
 		middlewares.AuthMiddleware(jwtManager)(
 			private,
 		),
+		cfg.Server.Timeout,
 	)
 
 	root.Handle("/api/", http.StripPrefix("/api", privateChain))

@@ -4,7 +4,6 @@ import (
 	"context"
 	"tm/internal/auth"
 	"tm/internal/dto"
-	_ "tm/internal/repository/models"
 	"tm/internal/validation"
 )
 

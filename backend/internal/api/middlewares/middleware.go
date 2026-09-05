@@ -25,23 +25,27 @@ func Chain(h http.Handler, m ...Middleware) http.Handler {
 	return h
 }
 
-func CommonChain(h http.Handler) http.Handler {
+func CommonChain(h http.Handler, timeout int) http.Handler {
 	return Chain(
 		h,
 		LogMiddleware,
 		RecoverMiddleware,
-		TimeoutMiddleware,
+		TimeoutMiddleware(timeout),
 	)
 }
 
-func TimeoutMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
-		defer cancel()
+func TimeoutMiddleware(timeout int) Middleware {
+	return func (next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			
+			ctx, cancel := context.WithTimeout(r.Context(), time.Duration(timeout)*time.Second)
+			defer cancel()
 
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
 }
+
 
 func LogMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
