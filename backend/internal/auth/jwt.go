@@ -17,14 +17,14 @@ func NewJWTManager(secret string) *JWTManager {
 	}
 }
 
-type Claims struct {
+type сlaims struct {
 	UserID int `json:"user_id"`
 
 	jwt.RegisteredClaims
 }
 
 func (j *JWTManager) Generate(userID int) (string, error) {
-	claims := Claims{
+	claims := сlaims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(
@@ -42,7 +42,7 @@ func (j *JWTManager) Generate(userID int) (string, error) {
 }
 
 func (j *JWTManager) Validate(tokenString string) (int, error) {
-	claims := &Claims{}
+	claims := &сlaims{}
 
 	token, err := jwt.ParseWithClaims(tokenString, claims,
 		func(token *jwt.Token) (any, error) {

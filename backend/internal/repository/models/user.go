@@ -4,12 +4,12 @@ type User struct {
 	ID           int    `gorm:"primaryKey"`
 	Name         string `gorm:"unique"`
 	Email        string `gorm:"unique"`
-	PasswordHash string
+	PasswordHash string `gorm:"not null"`
 
 	Tasks []Task `gorm:"foreignKey:UserID"`
 }
 
 type LoginResult struct {
-	ID           int
+	ID           int 
 	PasswordHash string
 }
