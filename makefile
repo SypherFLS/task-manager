@@ -1,4 +1,4 @@
-.PHONY: gpush, bups, bup, down
+.PHONY: gpush, bups, bup, down, callv
 
 gpush:
 	git add .
@@ -13,3 +13,6 @@ bup: # собрать весь проект
 
 down: 
 	docker-compose down -v
+
+callv:
+	cd backend && go-callvis ./cmd/main.go
