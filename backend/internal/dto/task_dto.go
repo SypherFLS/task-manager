@@ -55,7 +55,6 @@ func ToDTO(t models.Task) TaskDTO {
 		Label:       t.Label,
 		Description: t.Description,
 		Priority:    Plevel(t.Priority),
-		// Duration:    t.Duration,
 	}
 }
 
@@ -69,7 +68,7 @@ func ToDTOs(tasks []models.Task) []TaskDTO {
 	return res
 }
 
-func (t UpdateTaskDTO) ToMap() map[string]any {
+func (t *UpdateTaskDTO) ToMap() map[string]any {
 	updates := make(map[string]any)
 
 	if t.Label != nil {
