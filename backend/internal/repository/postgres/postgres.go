@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"fmt"
+	"time"
 	"tm/internal/config"
 	"tm/internal/repository/models"
 
@@ -32,6 +33,15 @@ func InitDB(cfg config.Config) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+	sqlDB.SetMaxOpenConns(100)
+	sqlDB.SetMaxIdleConns(25)
+	sqlDB.SetConnMaxLifetime(time.Hour)
+	sqlDB.SetConnMaxIdleTime(10 * time.Minute)
 
 	if err := db.AutoMigrate(&models.Task{}, &models.User{}); err != nil {
 		return nil, err
