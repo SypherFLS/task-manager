@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -9,7 +10,6 @@ import (
 	"tm/internal/auth"
 	"tm/internal/config"
 	"tm/internal/repository/postgres"
-	"github.com/joho/godotenv"
 	"tm/internal/services"
 )
 
@@ -21,7 +21,7 @@ func main() {
 	}
 
 	config_env := ""
-	switch os.Getenv("ENV"){
+	switch os.Getenv("ENV") {
 	case "local":
 		config_env = "CONFIG_PATH_BACKEND"
 	case "dev":
@@ -42,7 +42,7 @@ func main() {
 	}
 
 	jwtsecret := os.Getenv("JWT_SECRET")
-	JWTManager := auth.NewJWTManager(jwtsecret) 
+	JWTManager := auth.NewJWTManager(jwtsecret)
 
 	repo := postgres.NewRepo(db)
 	service := services.NewService(repo, JWTManager)

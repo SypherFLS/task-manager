@@ -10,6 +10,6 @@ type User struct {
 }
 
 type LoginResult struct {
-	ID           int 
+	ID           int
 	PasswordHash string
 }

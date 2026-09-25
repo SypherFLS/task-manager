@@ -5,41 +5,40 @@ import (
 )
 
 func ptr[T any](v T) *T {
-    return &v
+	return &v
 }
 
-
 func TestToMap(t *testing.T) {
-	tests := []struct{
+	tests := []struct {
 		Name string
-		Dto UpdateTaskDTO
+		Dto  UpdateTaskDTO
 		Want bool
-	}{	
+	}{
 		{
-			Name : "usual",
-			Dto : UpdateTaskDTO{
-				Label: ptr("usual"),
+			Name: "usual",
+			Dto: UpdateTaskDTO{
+				Label:       ptr("usual"),
 				Description: ptr("something"),
-				Priority: ptr(Low),
+				Priority:    ptr(Low),
 			},
-			Want : true,
+			Want: true,
 		},
 		{
-			Name : "Empty",
-			Dto : UpdateTaskDTO{
-				Label : ptr(""),
+			Name: "Empty",
+			Dto: UpdateTaskDTO{
+				Label:       ptr(""),
 				Description: ptr(""),
-				Priority: nil,
+				Priority:    nil,
 			},
-			Want : true,
+			Want: true,
 		},
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.Name, func(t *testing.T){
+		t.Run(tt.Name, func(t *testing.T) {
 			data := tt.Dto.ToMap()
 			_ = data
-			
+
 		})
 	}
 }

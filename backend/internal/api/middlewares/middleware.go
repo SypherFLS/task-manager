@@ -35,9 +35,9 @@ func CommonChain(h http.Handler, timeout int) http.Handler {
 }
 
 func TimeoutMiddleware(timeout int) Middleware {
-	return func (next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			
+
 			ctx, cancel := context.WithTimeout(r.Context(), time.Duration(timeout)*time.Second)
 			defer cancel()
 
@@ -45,7 +45,6 @@ func TimeoutMiddleware(timeout int) Middleware {
 		})
 	}
 }
-
 
 func LogMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

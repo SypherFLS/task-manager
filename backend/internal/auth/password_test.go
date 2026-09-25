@@ -1,4 +1,4 @@
-package auth 
+package auth
 
 import (
 	"testing"
@@ -25,34 +25,34 @@ func TestSolPassword(t *testing.T) {
 
 func TestCheckPassword(t *testing.T) {
 	tests := []struct {
-		Name string
+		Name     string
 		Password string
-		Want bool
+		Want     bool
 	}{
 		{
-			Name : "usual password",
-			Password : "UsualPassword",
-			Want : true,
+			Name:     "usual password",
+			Password: "UsualPassword",
+			Want:     true,
 		},
 		{
-			Name : "empty password",
-			Password : "",
-			Want : true,
+			Name:     "empty password",
+			Password: "",
+			Want:     true,
 		},
 		{
-			Name : "password with special symbols",
-			Password : "пароль密码🔥",
-			Want : true,
+			Name:     "password with special symbols",
+			Password: "пароль密码🔥",
+			Want:     true,
 		},
 		{
-			Name : "password with spaces",
-			Password : "this password have spaces",
-			Want : true,
+			Name:     "password with spaces",
+			Password: "this password have spaces",
+			Want:     true,
 		},
 	}
 
-	for _, tt := range tests{
-		t.Run(tt.Name, func(t *testing.T){
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T) {
 			hash, err := HashPassword(tt.Password)
 
 			if err != nil {
